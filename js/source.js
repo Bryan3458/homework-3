@@ -98,10 +98,95 @@ $(function () {
     // *********************************************************************
     // Do not modify the JS objects above. You will write your code below.
     // *********************************************************************
+    function showTexts() {
+        $("#username").text(username);
+        $(".revenue-amt").text(revenueAmt);
+        $("#customer-num").text(customerNum);
+        $("#orders-amt").text(ordersAmt);
+        $("#issues-amt").text(issuesAmt);
+    }
 
+    showTexts();
 
+    function showSales() {
+        $.each(sales, function (i, sale) {
+            let row = $("<tr></tr>");
+            row.append($("<td></td>").text(sale.product));
+            row.append($("<td></td>").text(sale.quantity));
+            row.append($("<td></td>").text(sale.revenue));
+            $("#salesTableBody").append(row);
+        });
+    }
 
-       
+    showSales();
 
+        function showCustomers() {
+        $.each(customers, function (i, customer) {
+            let row = $("<tr></tr>");
+            row.append($("<td></td>").text(customer.name));
+            row.append($("<td></td>").text(customer.email));
 
+            let status = $("<span></span>")
+                .addClass("status status-" + customer.status.toLowerCase())
+                .text(customer.status);
+            row.append($("<td></td>").append(status));
+
+            row.append($("<td></td>").text(customer.joined));
+            $("#customerTableBody").append(row);
+        });
+    }
+
+    showCustomers();
+
+        function showList(listId, items, key) {
+        $.each(items, function (i, item) {
+            $(listId).append($("<li></li>").text(item[key]));
+        });
+    }
+
+    function showLists() {
+        showList("#activity-list", activities, "message");
+        showList("#system-status-list", messages, "messsage");
+        showList("#notifications-list", notifications, "messsage");
+        showList("#tasks-list", tasks, "messsage");
+        $("#notification-num").text(notifAmt);
+    }
+
+    showLists();
+
+        $("button").button();
+
+    $("#dashboardTabs").tabs();
+
+    $("#customerDialog").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 450,
+        buttons: {
+            "Create Customer": function () {
+                var name = $("#customerName").val();
+                var email = $("#customerEmail").val();
+                if (!name || !email) {
+                    alert("Please enter a name and email.");
+                    return;
+                }
+                alert("Customer created: " + name);
+                $(this).dialog("close");
+            },
+            "Cancel": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $("#accordion").accordion({
+        collapsible: true,
+        heightStyle: "content"
+    });
+
+    $("#newCustomerButton").on("click", function () {
+        $("#customerDialog").dialog("open");
+    });
+
+    $("#customerDate").datepicker();
     });
